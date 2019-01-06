@@ -1,0 +1,9 @@
+@import url("fixed.css");
+
+body {
+    background-color: #e1e1e1;
+}
+
+#footer-text {
+    color: #666666;
+}
