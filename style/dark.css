@@ -1,7 +1,11 @@
 @import url("fixed.css");
 
-body {
+#main {
     background-color: #666666;
+}
+
+footer {
+    color: #7f7f7f;
 }
 
 #footer-text {
