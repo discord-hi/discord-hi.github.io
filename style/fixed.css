@@ -22,3 +22,8 @@ body {
 footer {
     text-align: center;
 }
+
+#big-join-hi-button {
+    height: 200%;
+    width: 200%;
+}
