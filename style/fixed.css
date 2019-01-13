@@ -6,9 +6,10 @@
     text-align: center;
 }
 
-#about-logo-img {
-    margin-top: 50%;
-    margin-bottom: 50%;
+#about-logo img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 html {
