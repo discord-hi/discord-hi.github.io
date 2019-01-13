@@ -14,7 +14,6 @@
 
 html {
     height: 100%;
-    overflow: scroll;
 }
 
 body {
@@ -25,6 +24,7 @@ body {
     text-align: center;
     height: 55%;
     width: 100%;
+    overflow: scroll;
 }
 
 footer {
