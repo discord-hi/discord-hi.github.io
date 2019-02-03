@@ -14,7 +14,6 @@ const PORT = process.env.PORT || 8080;
 const URL = "http://hi.iceblaze.net";
 const scopes = ["identify", "guilds"];
 app.enable("trust proxy"); //???
-app.set("view engine", "pug"); //???
 app.locals._ = _; //???
 
 passport.serializeUser(function(user, done) {
