@@ -60,11 +60,11 @@ app.get("/callback", passport.authenticate("discord", { failureRedirect: "/login
 );
 
 app.get("/", checkAuth, async (req, res) => {
-    res.sendFile("index.html");
+    res.sendFile("./views/index.html");
 });
 
 app.get("/giveaways", (req, res) => {
-    res.sendFile("giveaways.html");
+    res.sendFile("./views/giveaways.html");
 });
 
 app.listen(PORT, () => {
