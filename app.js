@@ -11,7 +11,7 @@ require("dotenv").config(); //put config in .env
 
 const app = express();
 const PORT = process.env.PORT || 8080;
-const URL = "http://hi.iceblaze.net";
+const URL = "https://thehi.site";
 const scopes = ["identify", "guilds"];
 app.enable("trust proxy"); 
 app.locals._ = _;
