@@ -8,7 +8,7 @@ require("dotenv").config(); //put config in .env
 
 //const bot = require("./bot"); //probably going to run our bot here so ¯\_(ツ)_/¯
 //const db = require("./db"); //used for the databasing
-
+//test
 const app = express();
 const PORT = process.env.PORT || 8080;
 const URL = "https://thehi.site";
