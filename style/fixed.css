@@ -6,25 +6,23 @@
     text-align: center;
 }
 
-#about-logo img {
-    display: table;
-    margin-left: auto;
-    margin-right: auto;
-}
-
 html {
     height: 100%;
 }
 
 body {
-    height: 100%;
+    min-height: 100%;
+}
+
+div {
+    overflow: auto;
 }
 
 #about {
     text-align: center;
-    height: 55%;
+    max-height: 55%;
     width: 100%;
-    overflow: scroll;
+    display: inline-block;
 }
 
 footer {
@@ -36,17 +34,12 @@ footer {
 }
 
 .vcenter {
-    -webkit-transform-style: preserve-3d;
-    -moz-transform-style: preserve-3d;
-    transform-style: preserve-3d;
+    display: table;
 }
 
-.vcenter img {
-    position: relative;
-    top: 50%;
-    -webkit-transform: translateY(50%);
-    -ms-transform: translateY(50%);
-    transform: translateY(50%);
+.vcenter * {
+    display: table-cell;
+    vertical-align: middle;
 }
 
 .noselect {
