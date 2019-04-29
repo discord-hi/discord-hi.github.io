@@ -55,9 +55,17 @@ app.use(passport.session());
 
 
 function checkAuth(req, res, next) {
-    if (req.isAuthenticated()) return next();
-    req.session.returnTo = req.originalUrl;
-    res.redirect("/login");
+  if (req.isAuthenticated()) return next();
+  req.session.returnTo = req.originalUrl;
+  res.redirect("/login");
+}
+
+function inServer(req, res, next){
+  if(bot.isInServer(req.user)){
+    return next();
+  } else {
+    render.render(req, res, "notInServer", {user: req.user});
+  }
 }
 
 app.get("/login", (req, res, next) => {if(req.isAuthenticated()){res.redirect("/profile")} else {return(next())}}, passport.authenticate("discord", { scope: scopes }),  (req, res) => {
@@ -78,7 +86,18 @@ app.get("/giveaways", (req, res) => {
   render.render(req, res, "giveaways", {user: req.user});
 });
 
+app.get("/verify", checkAuth, inServer, (req, res) => {
+  bot.verify(req.user);
+  render.render(req, res, "verify", {user: req.user});
+});
+
+app.get("*", function (req, res) {
+  res.status(404);
+  render.render(req, res, "404");
+});
+
 app.listen(PORT, () => {
   log.info(`[web] Listening on port ${PORT}`);
 });
+
 if (!process.env.NO_DISCORD) bot.start();

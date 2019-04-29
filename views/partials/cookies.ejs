@@ -1,0 +1,34 @@
+<script type="text/javascript" style="display: none;">
+    function setCookie(cname, cvalue, exdays) {
+        var d = new Date();
+        d.setTime(d.getTime() + (exdays*24*60*60*1000));
+        var expires = "expires="+ d.toUTCString();
+        document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+    }
+    function getCookie(cname) {
+        var name = cname + "=";
+        var decodedCookie = decodeURIComponent(document.cookie);
+        var ca = decodedCookie.split(';');
+        for(var i = 0; i <ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+            }
+        }
+        return "";
+    }
+    window.onload = function(){
+        if(getCookie("cookieclose") != undefined && getCookie("cookieclose") == "true"){
+            document.getElementById("cookienotif").parentElement.removeChild(document.getElementById("cookienotif"));
+        }
+    }
+</script>
+<p>
+    The only cookies we store are to allow you to login to our website, and to ensure you have a smooth experience browsing our website. By continuing to use our website, you agree to this usage of cookies.
+</p>
+<a href="#cookienotif" class="closefooter" onclick="setCookie('cookieclose', 'true', 30)">
+    <span style="color: black; font-size: 1.5em;"><i class="fas fa-times"></i></span>
+</a>

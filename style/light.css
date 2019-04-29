@@ -4,10 +4,14 @@
     background-color: #E1E1E1;
 }
 
-footer {
-    color: #EEEEEE;
+footer * {
+    color: #666666;
 }
 
-.footer-text {
+.cookies {
     color: #666666;
+}
+
+body {
+    background-color: lightgray;
 }

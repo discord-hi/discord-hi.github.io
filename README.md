@@ -4,3 +4,5 @@ This is the official website of hi, the giveaway server. You can feel free to co
 This repository is licensed under the MIT License.
 
 This website is still in beta.
+
+The hi bots command system was essentially stolen from Volcanic Bot.

@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
     <head>
-        <title>hi - Giveaways</title>
+        <title>hi - The Giveaway Server</title>
         <link rel="icon" href="/imgs/hi.png">
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -10,14 +10,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
   
-
-
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
-
-
-        <link rel="stylesheet" href="./dialog/css/bootstrap-dialog.css">
-
-        <script src="./dialog/js/bootstrap-dialog.js"></script>
 
         <%
             var color = "dark";
@@ -25,11 +18,21 @@
         %>
 
         <link rel="stylesheet" href="./style/<%= color %>.css">
+
+        <%
+            var msg;
+            if(user != undefined){
+                msg = "Hello, " + user.username + "! You should now have access to the rest of the server.";
+            } else {
+                msg = "Something went wrong. Please refresh the page to try again, or message FrostTaco#2938 on Discord."
+            }
+        %>
     <head>
     <body>           
-        <div class="body blurple">
+        <%- include('./partials/header', {color: color})%>
+        <div class="blurple body vcenter">
+            <h1><%= msg %></h1>
         </div>
-        <%- include('./partials/header', {giveaways: 'active', color: color})%>
         <footer class="bg-<%= color %>">
             <%- include('./partials/footer'); %>
         </footer>

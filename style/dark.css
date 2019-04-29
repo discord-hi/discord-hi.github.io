@@ -1,13 +1,33 @@
 @import url("fixed.css");
 
+::-webkit-scrollbar {
+    background: #676767;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #414141;
+}
+
+::-webkit-scrollbar-corner {
+    background: #676767;
+}
+
 #about {
     background-color: #666666;
 }
 
-footer {
-    color: #7f7f7f;
+footer * {
+    color: white;
 }
 
-.footer-text {
-    color: #e1e1e1;
+.cookies {
+    color: white;
+}
+
+html {
+    scrollbar-color: #414141 #676767;
+}
+
+html * {
+    scrollbar-color: #414141 #676767;
 }
