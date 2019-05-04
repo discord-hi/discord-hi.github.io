@@ -1,6 +1,13 @@
+const db = require("../../database");
+
 module.exports = async (client, log) => {
     client.on("ready", () => {
-        log.info(`[bot] Tag: ${client.user.tag}\nSTATISTICS\n${client.users.size} users\n${client.channels.size} channels!`);
+        setTimeout(() => {
+            client.guilds.get("525961593239109658").fetchInvites().then(guildInvites => {
+                db.invites = guildInvites;
+            });
+            log.info(`[bot] Tag: ${client.user.tag}\nSTATISTICS\n${client.users.size} users\n${client.channels.size} channels!`);
+        }, 1000);
         client.user.setActivity("!help for commands", { type: 0 });
         setInterval(() => {
             client.user.setActivity("!help for commands", { type: 0 });

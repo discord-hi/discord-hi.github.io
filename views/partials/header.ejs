@@ -7,13 +7,41 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="ml-auto navbar-nav">
+            <ul class="ml-auto navbar-nav nav">
                 <li class="nav-item <%= typeof home != 'undefined' ? home : '' %>"><a class="nav-link" href="/">Home</a></li>
                 <li class="nav-item <%= typeof giveaways != 'undefined' ? giveaways : '' %>"><a class="nav-link" href="/giveaways">Giveaways</a></li>
                 <li class="nav-item <%= typeof rewards != 'undefined' ? rewards : '' %>"><a class="nav-link" href="/rewards">My Rewards</a></li>
-                <li class="nav-item mr-4 <%= typeof profile != 'undefined' ? profile : '' %>"><a class="nav-link" href="/login"><span class="fas fa-user"></span> <%= user != undefined ? (user.username || "Login") : "Login" %></a></li> 
+                <% if(typeof user != undefined && user != null){ %>
+                    <li class="dropdown mr-4 <%= typeof profile != 'undefined' ? profile : '' %>">
+                        <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
+                            <span class="fas fa-user"></span> <%= user != undefined ? (user.username || "Login") : "Login" %>
+                        </a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="/login">Profile</a>
+                            <div class="dropdown-divider"></div>
+                            <form class="px-4 py-3">
+                                <div class="form-group">
+                                    <input id="darkmode" type="checkbox" checked data-toggle="toggle" data-on="Dark Mode" data-off="Light Mode" data-onstyle="secondary" data-offstyle="light" data-width="100%">
+                                </div>
+                            </form>
+                        </div>
+                    </li> 
+                <% } else { %>
+                    <li class="nav-item mr-4 <%= typeof profile != 'undefined' ? profile : '' %>"><a class="nav-link" href="/login"><span class="fas fa-user"></span> Login</a></li> 
+                <% } %>
                 <li class="nav-item"><a class="btn btn-<%= color == "dark" ? "light" : "dark" %>" href="https://discord.gg/Xda3AVn" role="button">Join hi</a></li>
             </ul>
         </div>
     </div>
 </nav>
+<script>
+    $('#darkmode').change(function() {
+        $.ajax({
+            url: 'settings',
+            type: 'POST',
+            data: {
+                darkmode: $('#darkmode').is(':checked')
+            }             
+        });
+    });
+</script>

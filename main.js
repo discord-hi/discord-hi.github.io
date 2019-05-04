@@ -5,10 +5,12 @@ const _ = require("lodash"); //???
 const passport = require("passport");
 const DiscordStrategy = require("passport-discord").Strategy;
 require("dotenv").config(); //put config in .env
+var bodyParser = require('body-parser');
 
 const log = require('./logger').log;
 const bot = require("./bot/main");
 const render = require("./render");
+const database = require("./database");
 //const db = require("./db"); //used for the databasing
 
 const app = express();
@@ -20,6 +22,8 @@ app.locals._ = _;
 app.set('view engine', 'ejs');
 app.use(helmet({ noCache: true }));
 app.use(express.static('views'));
+app.use(bodyParser.json()); // support json encoded bodies
+app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 app.use('/style', express.static('./style'));
 app.use('/js', express.static('./js'));
 app.use('/imgs', express.static('./imgs'));
@@ -89,6 +93,10 @@ app.get("/giveaways", (req, res) => {
 app.get("/verify", checkAuth, inServer, (req, res) => {
   bot.verify(req.user);
   render.render(req, res, "verify", {user: req.user});
+});
+
+app.post("/settings", checkAuth, (req, res) => {
+  log.info("Dark Mode: " + req.body.darkmode);
 });
 
 app.get("*", function (req, res) {

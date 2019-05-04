@@ -1,6 +1,14 @@
+const db = require("../../database");
+
 exports.run = async (client, message, command, args) => {
     message.channel.send('Searching for your status.').then(msg => {
-        msg.edit(`There was an issue getting your stats. Please try again later.`);
+        db.getUser(message.author.id, (user) => {
+            if(user != false){
+                msg.edit(":military_medal:: " + user["credits"] + "\n:e_mail:: " + user["invites"] + "\n:newspaper:: " + user["messages"]);
+            } else {
+                msg.edit("Something went wrong! Please try again later.")
+            }
+        });
     });
 };
 
