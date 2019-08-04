@@ -7,7 +7,8 @@ exports.run = async (client, message, command, args) => {
 exports.conf = {
     enabled: true,
     guildOnly: false,
-    aliases: []
+    aliases: [],
+    permissionlevel: 0
 };
 
 exports.help = {

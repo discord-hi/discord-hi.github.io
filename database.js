@@ -12,6 +12,7 @@ var pool = mysql.createPool({
 });
 
 var users = {};
+var queuedMsgs = {};
 var giveaways = {};
 
 var invites = {};
@@ -26,14 +27,13 @@ var DB = (function () {
             }
 
             connection.query(query, params, function (err, rows) {
-                connection.release();
                 if (!err) {
                     callback(rows);
                 }
                 else {
                     callback(null, err);
                 }
-
+                connection.release();
             });
 
             connection.on('error', function (err) {
@@ -52,41 +52,21 @@ function updateData(){
     getGiveaways();
 }
 
-/*function getUsers(){
-    DB.query("SELECT * FROM users", function (err, result){
-        if (err) log.error("[DB] Users could not be loaded: " + err);
-        if(result) {
-            Object.keys(result).forEach(function(key) { 
-                var row = result[key];
-                users[row["id"]] = {};
-                users[row["id"]]["IPs"] = row["IPs"];
-                users[row["id"]]["darkmode"] = row["darkmode"];
-                users[row["id"]]["invitedby"] = row["invitedby"];
-                users[row["id"]]["invites"] = row["invites"];
-                users[row["id"]]["messages"] = row["messages"];
-                users[row["id"]]["credits"] = row["credits"];
-                users[row["id"]]["giveawayswon"] = row["giveawayswon"];
-                log.info("Loaded user " + row["id"] + ": " + JSON.stringify(users[row["id"]]));
-            });
-        } else {
-            log.error("[DB] Users could not be loaded.")
-        }
-    });
-}*/
-
 updateData();
 
 function getUserDB(userid, next){
     DB.query("SELECT * FROM users WHERE id = " + userid, function (err, result){
         if (err) log.error("[DB] User could not be loaded: " + err);
         if(result.length != 0){
-            Object.keys(result).forEach(function(key) { 
+            Object.keys(result).forEach((key) => { 
                 var row = result[key];
                 users[row["id"]] = {};
+                users[row["id"]]["permissionlevel"] = row["permissionlevel"];
                 users[row["id"]]["IPs"] = row["IPs"];
                 users[row["id"]]["darkmode"] = row["darkmode"];
                 users[row["id"]]["invitedby"] = row["invitedby"];
                 users[row["id"]]["invites"] = row["invites"];
+                users[row["id"]]["leaves"] = row["leaves"];
                 users[row["id"]]["messages"] = row["messages"];
                 users[row["id"]]["credits"] = row["credits"];
                 users[row["id"]]["giveawayswon"] = row["giveawayswon"];
@@ -114,10 +94,12 @@ function makeUser(userid, invitedby, other, next){
             if (err) log.error("[DB] User could not be created: " + err);
             if(result) {
                 users[userid] = {};
+                users[userid]["permissionlevel"] = other !== undefined && other !== null && other["permissionlevel"] !== undefined && other["permissionlevel"] !== null ? other["permissionlevel"] : null;
                 users[userid]["IPs"] = other !== undefined && other !== null && other["IPs"] !== undefined && other["IPs"] !== null ? other["IPs"] : null;
                 users[userid]["darkmode"] = other !== undefined && other !== null && other["darkmode"] !== undefined && other["darkmode"] !== null ? other["darkmode"] : null;
                 users[userid]["invitedby"] = invitedby;
                 users[userid]["invites"] = other !== undefined && other !== null && other["invites"] !== undefined && other["invites"] !== null ? other["invites"] : null;
+                users[userid]["leaves"] = other !== undefined && other !== null && other["leaves"] !== undefined && other["leaves"] !== null ? other["leaves"] : null;
                 users[userid]["messages"] = other !== undefined && other !== null && other["messages"] !== undefined && other["messages"] !== null ? other["messages"] : null;
                 users[userid]["credits"] = other !== undefined && other !== null && other["credits"] !== undefined && other["credits"] !== null ? other["credits"] : null;
                 users[userid]["giveawayswon"] = other !== undefined && other !== null && other["giveawayswon"] !== undefined && other["giveawayswon"] !== null ? other["giveawayswon"] : null;
@@ -183,9 +165,37 @@ function updateUser(userid, other, next){
     });
 }
 
+function getTop(low, sort, next){
+    DB.query("SELECT * FROM `users` ORDER BY `" + sort + "` DESC LIMIT " + (low * 10 - 10) + ", 10;", function (err, result){
+        if (err) log.error("[DB] Top could not be loaded: " + err);
+        if(result) {
+            log.info("Fetched leaderboard page: " + low + " by: " + sort);
+            return next(result);
+        } else {
+            log.error("[DB] Top could not be loaded.");
+            return next(false);
+        }
+    });
+}
+
+function queueMsg(userid){
+    makeUser(userid, null, {}, (success) => {
+        queuedMsgs[userid] = Object.keys(queuedMsgs).includes(userid) ? queuedMsgs[userid] + 1 : 1;
+        users[userid]["messages"] = users[userid] != 'undefined' ? users[userid]["messages"] + 1 : 1;
+        users[userid]["credits"] = users[userid] != 'undefined' ? users[userid]["credits"] + 1 : 1;
+    });
+}
+
 function getGiveaways(){
 
 }
+
+setInterval(() => {
+    Object.keys(queuedMsgs).forEach((userid) => {
+        updateUser(userid, {messages: users[userid]["messages"], credits: users[userid]["credits"]}, () => {});
+        delete queuedMsgs[userid];
+    });
+}, 120000);
 
 module.exports = {
     updateData: updateData,
@@ -193,5 +203,7 @@ module.exports = {
     getUser: getUser,
     userExists: userExists,
     updateUser: updateUser,
+    queueMsg: queueMsg,
+    getTop: getTop,
     invites: invites
 };

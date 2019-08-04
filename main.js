@@ -95,6 +95,18 @@ app.get("/verify", checkAuth, inServer, (req, res) => {
   render.render(req, res, "verify", {user: req.user});
 });
 
+app.get("/stream", (req, res) => {
+  //if(req.headers['cf-connecting-ip'] == "144.217.13.11"){
+    render.render(req, res, "stream", {});
+  //} else {
+    render.render(req, res, "streammain", {});
+  //}
+})
+
+app.get("/streammain", (req, res) => {
+  render.render(req, res, "streammain", {});
+})
+
 app.post("/settings", checkAuth, (req, res) => {
   log.info("Dark Mode: " + req.body.darkmode);
 });
